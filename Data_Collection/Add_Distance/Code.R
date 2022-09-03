@@ -4,7 +4,6 @@ library(stringr)
 library(lubridate)
 library(hms)
 
-dta = read.csv("/home/keitaro2/Uber_Chicago/Raw_Data/Key_Data/dta.csv")
 add_distance(dta){
   tracts=read_sf("/home/keitaro2/Uber_Chicago/Raw_Data/Data_Geo/Boundaries - Census Tracts - 2010.geojson")
   zone=read_sf("/home/keitaro2/Uber_Chicago/Raw_Data/Data_Geo/downtown_zone.shp")
