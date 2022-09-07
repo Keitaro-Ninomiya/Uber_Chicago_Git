@@ -11,7 +11,6 @@ PairListCT=read.csv("/home/keitaro2/Uber_Chicago/Raw_Data/Key_Data/PairList.csv"
 #Pair:Community_Area_Level
 PairListCO=read.csv("/home/keitaro2/Uber_Chicago/Raw_Data/Key_Data/PairList_Expand.csv")
 
-
 #Clean Data and Add variables
 #Trip_Level
 source("/home/keitaro2/Uber_Chicago_Git/Data_Cleaning/Cleaning/Code.R")
