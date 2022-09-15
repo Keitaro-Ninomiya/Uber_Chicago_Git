@@ -5,108 +5,29 @@ library(haven)
 library(MASS)
 library(fixest)
 
+path_remote="/home/keitaro2/Uber_Chicago_Git"
+setwd(paste(path_remote,"/Results/DID",sep=""))
+
 dtaDay1 = read.csv("/home/keitaro2/Uber_Chicago/Raw_Data/Key_Data/dtaDay1.csv")
 dtaDay1=dtaDay1 %>% 
   group_by(OD_Pair,Date) %>% 
   mutate(ID = cur_group_id())
 
-reg=function(Dist,Char){
-  results = fepois(Count~GeoTrt:Post+PairDist|OD_Pair+as_factor(week)+Post,
-                   data=dtaDay1 %>% 
-                     filter(PU_Dist<Dist|DO_Dist<Dist))
-  return(results)
-}
-
-regPD=function(Dist,Char){
-  results = fepois(Count~GeoTrt:Post+PairDist|as_factor(PU_Tract)+as_factor(DO_Tract)+as_factor(week)+Post,
-                   data=dtaDay1 %>% 
-                     filter(PU_Dist<Dist|DO_Dist<Dist))
-  return(results)
-}
-
-report=function(results,Char){
-  sink(Char)
-  summary(results)
-  sink()
-}
-
-setwd("/home/keitaro2/Uber_Chicago/DID/Pair_Level/Geo/MainResults")
-#2k
-results=reg(2000,"2k.txt")
-sink("2k.txt")
-summary(results,vcov="iid")
-sink()
-results=regPD(2000,"2k.txt")
-sink("2kPD.txt") 
-summary(results,vcov="twoway")
-sink()
-
-#05k
-reg(500,"05k.txt")
-regPD(500,"05k.txt")
-
-#1k
-reg(1000,"1k.txt")
-regPD(1000,"1k.txt")
-
-#3k
-reg(3000,"3k.txt")
-regPD(3000,"3k.txt")
-
-#4k
-reg(4000,"4k.txt")
-regPD(4000,"4k.txt")
-
-#5k
-reg(5000,"5k.txt")
-regPD(5000,"5k.txt")
-
-
-#Outside
-#3k
-results = glm(Count~GeoTrt+as_factor(week)+GeoTrt:Post+Post+PairDist,
-              data=dtaDay2 %>% 
-                filter(PU_Dist<3000|DO_Dist<3000),
-              family = poisson(link = "log"))
-sink("DIDGeo_TimeFE_Outside.txt")
-summary(results)
-sink()
-
-#By Border ####
-results = glm(Count~GeoTrt+as_factor(week)+GeoTrt:Post+Post+PairDist,
-              data=dtaDay1 %>% 
-                filter(PU_Dist<1000|DO_Dist<1000,
-                       PU_BdN==1|DO_BdN==1|PU_BdS==1|DO_BdS==1),
-              family = poisson(link = "log"))
+#Main Results ####
 sink("DIDGeo_BdNS1k.txt")
-summary(results)
+summary(regBD(dtaDay1,1000))
 sink()
 
-results = glm(Count~GeoTrt+as_factor(week)+GeoTrt:Post+Post+PairDist,
-              data=dtaDay1 %>% 
-                filter(PU_Dist<2000|DO_Dist<2000,
-                       PU_BdN==1|DO_BdN==1|PU_BdS==1|DO_BdS==1),
-              family = poisson(link = "log"))
 sink("DIDGeo_BdNS2k.txt")
-summary(results)
+summary(regBD(dtaDay1,2000))
 sink()
 
-results = glm(Count~GeoTrt+as_factor(week)+GeoTrt:Post+Post+PairDist,
-              data=dtaDay1 %>% 
-                filter(PU_Dist<3000|DO_Dist<3000,
-                       PU_BdN==1|DO_BdN==1|PU_BdS==1|DO_BdS==1),
-              family = poisson(link = "log"))
 sink("DIDGeo_BdNS3k.txt")
-summary(results)
+summary(regBD(dtaDay1,3000))
 sink()
 
-results = glm(Count~GeoTrt+as_factor(week)+GeoTrt:Post+Post+PairDist,
-              data=dtaDay1 %>% 
-                filter(PU_Dist<500|DO_Dist<500,
-                       PU_BdN==1|DO_BdN==1|PU_BdS==1|DO_BdS==1),
-              family = poisson(link = "log"))
 sink("DIDGeo_BdNS05k.txt")
-summary(results)
+summary(regBD(dtaDay1,500))
 sink()
 
 
