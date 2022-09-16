@@ -10,6 +10,7 @@ path_remote="/home/keitaro2/Uber_Chicago_Git"
 path_remote_OL="/home/keitaro2/Uber_Chicago_OL"
 setwd(paste(path_remote_OL,"/Results/DID",sep=""))
 
+#Geo####
 dtaDay1 = read.csv("/home/keitaro2/Uber_Chicago/Raw_Data/Key_Data/dtaDay1.csv")
 dtaDay1=dtaDay1 %>% 
   group_by(OD_Pair,Date) %>% 
@@ -21,19 +22,14 @@ fileConn<-file("Results.tex")
 writeLines(Result, fileConn)
 close(fileConn)
 
+#Int ####
+dta15=read.csv("/home/keitaro2/Uber_Chicago/Raw_Data/Key_Data/dtaInt15Month.csv")
+dta15 = dta15 %>% 
+  mutate(IntTrt = case_when(Hour%in%c(5,22)~1,
+                            TRUE~0))
 
-sink("DIDGeo_BdNS1k.txt")
-summary(regBD(dtaDay1,1000))
-sink()
+Result=regBD_Int(dta15)
+fileConn<-file("Results_Int.tex")
+writeLines(Result, fileConn)
+close(fileConn)
 
-sink("DIDGeo_BdNS2k.txt")
-summary(regBD(dtaDay1,2000))
-sink()
-
-sink("DIDGeo_BdNS3k.txt")
-summary(regBD(dtaDay1,3000))
-sink()
-
-sink("DIDGeo_BdNS05k.txt")
-summary(regBD(dtaDay1,500))
-sink()
