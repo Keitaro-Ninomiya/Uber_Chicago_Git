@@ -14,14 +14,27 @@ regBD=function(){
   return(modelsummary(lapply(c(500,1000,2000,3000),regression)))
   }
 
-regressionBD_Int=function(dta,Dist){
-  results = fepois(Count~IntTrt+GeoTrt+Post+
-                     IntTrt:GeoTrt+IntTrt:Post+Post:GeoTrt+
-                     Post:GeoTrt:IntTrt+
-                     PairDist|OD_Pair,
-                   data=dta %>% 
-                     filter(PU_Dist<Dist|DO_Dist<Dist,
-                            PU_BdN==1|DO_BdN==1|PU_BdS==1|DO_BdS==1))
+regressionBD_Int=function(dta,Dist,Time){
+  if(Time=="Both"){
+    results = fepois(Count~IntTrt+GeoTrt+Post+
+                       IntTrt:GeoTrt+IntTrt:Post+Post:GeoTrt+
+                       Post:GeoTrt:IntTrt+
+                       PairDist|OD_Pair,
+                     data=dta %>% 
+                       filter(PU_Dist<Dist|DO_Dist<Dist,
+                              PU_BdN==1|DO_BdN==1|PU_BdS==1|DO_BdS==1))
+  }
+  else{
+    results = fepois(Count~IntTrt+GeoTrt+Post+
+                       IntTrt:GeoTrt+IntTrt:Post+Post:GeoTrt+
+                       Post:GeoTrt:IntTrt+
+                       PairDist|OD_Pair,
+                     data=dta %>% 
+                       filter(PU_Dist<Dist|DO_Dist<Dist,
+                              PU_BdN==1|DO_BdN==1|PU_BdS==1|DO_BdS==1,
+                              Hour==Time))
+  }
+  return(results)
 }
 
 regBD_Int=function(dta){
