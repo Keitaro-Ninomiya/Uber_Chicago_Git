@@ -26,10 +26,24 @@ close(fileConn)
 dta15=read.csv("/home/keitaro2/Uber_Chicago/Raw_Data/Key_Data/dtaInt15Month.csv")
 dta15 = dta15 %>% 
   mutate(IntTrt = case_when(Hour%in%c(5,22)~1,
-                            TRUE~0))
+                            TRUE~0),
+         Time=case_when(Hour%in%c(5,6)~"Morning",
+                        TRUE~"Evening"))
 
-Result=regBD_Int(dta15)
-fileConn<-file("Results_Int.tex")
+#Morning
+Result=regBD_Int(dta15,"Morning")
+fileConn<-file("Results_Int_Morning.tex")
 writeLines(Result, fileConn)
 close(fileConn)
 
+#Evening
+Result=regBD_Int(dta15,"Evening")
+fileConn<-file("Results_Int_Evening.tex")
+writeLines(Result, fileConn)
+close(fileConn)
+
+#Pooled
+Result=regBD_Int(dta15,"Both")
+fileConn<-file("Results_Int.tex")
+writeLines(Result, fileConn)
+close(fileConn)
