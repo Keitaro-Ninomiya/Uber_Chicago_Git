@@ -16,21 +16,17 @@ dtaDay1=dtaDay1 %>%
   group_by(OD_Pair,Date) %>% 
   mutate(ID = cur_group_id())
 
-#Main Results ####
-Result=modelsummary(lapply(c(500,1000,2000,3000),regression),output="latex")
-fileConn<-file("Results.tex")
-writeLines(Result, fileConn)
-close(fileConn)
-
-#Int ####
-dta15=read.csv("/home/keitaro2/Uber_Chicago/Raw_Data/Key_Data/dtaInt15Month.csv")
+#Int
+dta15=read.csv("/home/keitaro2/Uber_Chicago/Raw_Data/Key_Data/dtaInt15Month_v2.csv")
 dta15 = dta15 %>% 
   mutate(IntTrt = case_when(Hour%in%c(5,22)~1,
                             TRUE~0),
          Time=case_when(Hour%in%c(5,6)~"Morning",
                         TRUE~"Evening"))
 
+#Main Results ####
 #Morning
+source("Regression/Code.R")
 Result=regBD_Int(dta15,"Morning")
 fileConn<-file("Results_Int_Morning.tex")
 writeLines(Result, fileConn)

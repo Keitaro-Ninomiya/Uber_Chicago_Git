@@ -128,7 +128,9 @@ dtaOrg = dtaOrg %>%
 
 dta15_St = dta %>% 
   filter(Hour_St%in%c(21,22)) %>% 
-  group_by(Post,Hour_St,Minute_St,OD_Pair,GeoTrt) %>% 
+  group_by(Post,Hour_St,Minute_St,OD_Pair,GeoTrt,
+           PU_BdN,PU_BdNW,PU_BdSW,PU_BdS,
+           DO_BdN,DO_BdNW,DO_BdSW,DO_BdS) %>% 
   summarise(Count = sum(exist,na.rm = T),
             Trip.Seconds = mean(Trip.Seconds,na.rm = T),
             Trip.Miles = mean(Trip.Miles,na.rm = T),
@@ -141,7 +143,9 @@ dta15_St = dta %>%
 #Second Cutoff ####
 dta15_End = dta %>% 
   filter(Hour_End%in%c(5,6)) %>% 
-  group_by(Post,Hour_End,Minute_End,OD_Pair,GeoTrt) %>% 
+  group_by(Post,Hour_End,Minute_End,OD_Pair,GeoTrt,
+           PU_BdN,PU_BdNW,PU_BdSW,PU_BdS,
+           DO_BdN,DO_BdNW,DO_BdSW,DO_BdS) %>% 
   summarise(Count = sum(exist,na.rm = T),
             Trip.Seconds = mean(Trip.Seconds,na.rm = T),
             Trip.Miles = mean(Trip.Miles,na.rm = T),
