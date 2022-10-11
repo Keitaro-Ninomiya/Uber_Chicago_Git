@@ -19,7 +19,6 @@ dtaDay1=dtaDay1 %>%
 
 #Main Results ####
 #DID####
-#DID####
 Result=regBD(dtaDay1)
 fileConn<-file("Results_Geo.tex")
 writeLines(Result, fileConn)
