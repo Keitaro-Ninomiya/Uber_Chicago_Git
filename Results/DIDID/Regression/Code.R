@@ -19,7 +19,7 @@ regressionBD_Int=function(dta,Dist,Time){
     results = fepois(Count~IntTrt+GeoTrt+Post+
                        IntTrt:GeoTrt+IntTrt:Post+Post:GeoTrt+
                        Post:GeoTrt:IntTrt+
-                       PairDist|OD_Pair,
+                       PairDist|PU_Tract+DO_Tract,
                      data=dta %>% 
                        filter(PU_Dist<Dist|DO_Dist<Dist))
   }
@@ -27,7 +27,7 @@ regressionBD_Int=function(dta,Dist,Time){
     results = fepois(Count~IntTrt+GeoTrt+Post+
                        IntTrt:GeoTrt+IntTrt:Post+Post:GeoTrt+
                        Post:GeoTrt:IntTrt+
-                       PairDist|OD_Pair,
+                       PairDist|PU_Tract+DO_Tract,
                      data=dta %>% 
                        filter(PU_Dist<Dist|DO_Dist<Dist,
                               Time==Time))
@@ -36,7 +36,7 @@ regressionBD_Int=function(dta,Dist,Time){
 }
 
 regBD_Int=function(dta,Time){
-  return(modelsummary(lapply(c(500,1000,2000,3000),regressionBD_Int,dta=dta,Time=Time),stars = TRUE,output="latex"))
+  return(modelsummary(lapply(c(500,1000,2000,3000,Inf),regressionBD_Int,dta=dta,Time=Time),stars = TRUE,output="latex"))
 }
 sink("DIDID_2k.txt")
 summary(results)

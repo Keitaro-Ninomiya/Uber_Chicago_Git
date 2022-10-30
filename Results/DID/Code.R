@@ -11,7 +11,7 @@ path_remote_OL="/home/keitaro2/Uber_Chicago_OL"
 setwd(paste(path_remote_OL,"/Results/DID",sep=""))
 
 #Geo####
-source(paste(path_remote,"Results/DID/Regression/Code.R",sep=""))
+source(paste(path_remote,"/Results/DID/Regression/Code.R",sep=""))
 dtaDay1 = read.csv("/home/keitaro2/Uber_Chicago/Raw_Data/Key_Data/dtaDay1.csv")
 dtaDay1=dtaDay1 %>% 
   group_by(OD_Pair,Date) %>% 

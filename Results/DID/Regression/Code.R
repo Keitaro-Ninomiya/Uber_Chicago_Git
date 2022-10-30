@@ -1,4 +1,5 @@
 library(modelsummary)
+library(fixest)
 library(dplyr)
 
 #
@@ -9,6 +10,14 @@ regression=function(dta,Dist){
                   filter(PU_Dist<Dist|DO_Dist<Dist,
                          PU_BdN==1|DO_BdN==1|PU_BdS==1|DO_BdS==1),
                 family = poisson(link = "log"))
+  return(results)
+}
+
+regression=function(dta,Dist){
+  results = fepois(Count~GeoTrt+GeoTrt:Post+Post+PairDist|as.factor(week)+PU_Tract+DO_Tract,
+                   data=dta %>%
+                     filter(PU_Dist<Dist|DO_Dist<Dist,
+                            PU_BdN==1|DO_BdN==1|PU_BdS==1|DO_BdS==1))
   return(results)
 }
 
